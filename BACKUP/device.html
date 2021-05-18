@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>Auto-coffee</title>
+</head>
+<body class="brown white-text">
+
+    <nav class="nav-wrapper brown darken-2">
+        <div class="container">
+            <a href="index.html" class="brand-logo">Auto-coffee</a>
+            <a href="#" class="sidenav-trigger" data-target="mobile-links">
+                <i class="material-icons">menu</i>
+            </a>
+            <ul class="right hide-on-med-and-down">
+                <li><a class="btn waves-effect waves-light deep-orange darken-2" href="login.html">Login</a></li>
+                <li><a class="btn waves-effect waves-light orange" href="register.html">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav brown lighten-2" id="mobile-links">
+        <li><a class="btn waves-effect waves-light deep-orange darken-2" href="login.html">Login</a></li>
+        <li><a class="btn waves-effect waves-light orange" href="register.html">Register</a></li>
+    </ul>
+
+
+    
+    <div class="container center-align">
+        <h1>device</h1>
+    </div>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.sidenav').sidenav();
+        })
+    </script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/8.3.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/8.3.1/firebase-analytics.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+</body>
+</html>
