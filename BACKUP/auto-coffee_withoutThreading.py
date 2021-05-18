@@ -13,13 +13,18 @@ btnRelay1 = 31 #groene kabels!
 btnRelay2 = 33 #paarse kabels
 sensorReservoirPin = 32 #blauw
 ledPin = 35 #wit
+servoPin = 11 #bruin
 
 GPIO.setup(btnPairing, GPIO.IN, pull_up_down=GPIO.PUD_UP) #btnPairing
 GPIO.setup(btnRelay1,GPIO.IN, pull_up_down=GPIO.PUD_UP) #btnRelay1
 GPIO.setup(btnRelay2,GPIO.IN, pull_up_down=GPIO.PUD_UP) #btnRelay2
 
 GPIO.setup(sensorReservoirPin, GPIO.IN, pull_up_down=GPIO.PUD_UP) #sensorReservoir
-GPIO.setup(ledPin,GPIO.OUT) #ledRED
+GPIO.setup(ledPin,GPIO.OUT) #led
+
+GPIO.setup(servoPin, GPIO.OUT) #servo
+p = GPIO.PWM(servoPin, 50)
+p.start(2.5)
 
 relayPins = [8,10] #8 : groen (btnrelay1) ; 10 : paars (btnrelay2)
 
@@ -100,11 +105,12 @@ def sensor_reservoir_callback(channel):
         coll_d.document(Key).update({u"reservoirFull":u"True"})
         reservoirFull = True
 
-def button_relay1_callback(channel):
+def button_relaysDemo_callback(channel):
     relay1_callback()
-
-def button_relay2_callback(channel):
     relay2_callback()
+
+def button_motor_callback(channel):
+    release_coffee()
 
 def relay1_callback():
     global relay1IsOn
@@ -132,6 +138,13 @@ def relay2_callback():
         relayOf(relayPins[1])
         relay2IsOn = False
 
+def release_coffee():
+    p.ChangeDutyCycle(10)
+    sleep(0.5)
+    p.ChangeDutyCycle(2.5)
+    coll_d.document(Key).set({u"Status": u"Available", "reservoirFull":False})
+
+
 def listen_status():
     doc_ref = db.collection(u'Devices').document(Key)
     doc = doc_ref.get()
@@ -142,13 +155,14 @@ def listen_status():
     deviceStatus = doc_dict.get(u'Status')
     if(deviceStatus == "One Cup"):
         relay1_callback()
-    elif(deviceStatus == "Two Cup's"):
         relay2_callback()
+    elif(deviceStatus == "Two Cup's"):
+        release_coffee()
 
 
 GPIO.add_event_detect(btnPairing,GPIO.RISING,callback=button_pairing_callback)
-GPIO.add_event_detect(btnRelay1,GPIO.RISING,callback=button_relay1_callback)
-GPIO.add_event_detect(btnRelay2,GPIO.RISING,callback=button_relay2_callback)
+GPIO.add_event_detect(btnRelay1,GPIO.RISING,callback=button_relaysDemo_callback)
+GPIO.add_event_detect(btnRelay2,GPIO.RISING,callback=button_motor_callback)
 
 GPIO.add_event_detect(sensorReservoirPin,GPIO.BOTH,callback=sensor_reservoir_callback, bouncetime= 200)
 
@@ -164,11 +178,13 @@ try:
         listen_status()
 except:
     of(ledPin)
+    p.stop()
     GPIO.cleanup()
     pairing_end()
     coll_d.document(Key).update({u"Status":u"offline"})
 finally:
     of(ledPin)
+    p.stop()
     GPIO.cleanup()
     pairing_end()
     coll_d.document(Key).update({u"Status":u"offline"})
