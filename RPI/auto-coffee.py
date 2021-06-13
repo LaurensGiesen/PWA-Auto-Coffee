@@ -3,7 +3,6 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import RPi.GPIO as GPIO
 from time import sleep
-import threading
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -64,8 +63,6 @@ def relayOf(i):
 
 def init_device():
     coll_d.document(Key).set({u"Status": u"Available", "reservoirFull":False})
-
-devInitialized = False
     
 def pairing_start():
     global pairing
