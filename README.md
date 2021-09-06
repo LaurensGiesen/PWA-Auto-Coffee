@@ -1,0 +1,1 @@
+An old Senseo coffee machine turned into IOT so you can make coffee from your bed. The control was done via a Raspberry PI, as well as the continuous reading of the sensors. Then used Firebase to host our PWA on. 
